@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-//#define NOMBRE "listado.csv"
 using namespace std;
 class Usuario{
     int tam=6;
@@ -17,6 +16,7 @@ class Usuario{
     public:
         //Usuario(string,string,string);
         void agregar();
+        int buscar(string _password,string _codigo);
         void eliminar(string);
         void listarTodos();
         //void verificar();
@@ -51,9 +51,52 @@ void Usuario::agregar(){
     cout<<"\n\t\tDatos agregados :\n";
     cout<<"contraseña : "<<password<<"codigo : "<<codigo<<"\nnombre : "<<nombre<<"\ntelefono : "<<fono<<"\ndireccion : "<<direccion<<"\nsexo : "<<sexo<<"\nPresenta internet : "<<internet<<"\nPresenta covid : "<<covid<<"\nContraseña : "<<password<<"\n";
 }
-void Usuario::eliminar(string code){
-    ofstream escritura;
-    escritura.open("listado.csv",ios::ate);
+int Usuario::buscar(string _password, string _codigo){
+    ifstream leer;
+    string linea;
+    int busq_linea=1;
+    char coma = ',';
+    leer.open("final.csv",ios::in);
+    getline(leer,linea);
+
+    while (getline(leer,linea)){
+        int i=0;
+        int j=0;
+        while(linea[i] != coma){   
+            if(linea[i] != _password[i]){
+                break;
+            }
+            i++;
+            }
+        i++;    
+        if(i==_password.size()+1){
+            while (linea[i] != coma){
+                if(linea[i] != _codigo[j]){
+                    break;
+                }
+                i++;
+                j++;
+            }
+            if(j==_codigo.size()){
+                return busq_linea;
+            }
+        }
+        busq_linea++;
+    }
+    leer.close();
+    return 0;
+}
+void Usuario::eliminar(string linea){    //incompleto
+    ifstream eliminar;
+    ofstream copiar;
+    string linea;
+    eliminar.open("listado.csv");
+    while(getline(eliminar,linea)){
+        
+
+    }
+    
+    eliminar.close();
 }
 void Usuario::listarTodos(){
     ifstream lectura;
@@ -62,24 +105,9 @@ void Usuario::listarTodos(){
     lectura>>temp;
     int i=0;
     while (!lectura.eof()){
-        for(int i=0;i<8;i++){   
-            string *ptr;
-            if(i==0){
-                ptr = strtok(temp,",");
-            }
-        }
-       //lectura.getline(temp,sizeof(temp));  
+        getline(lectura,temp);
+        cout<<temp<<endl;
         i++;
-        //getline(lectura,temp);
-        //cout<<temp<<endl;
-        //cout<< i<<endl;        
-    }
-    //int i=0;
-    // while(lectura.good()){
-    //     lectura>>password>>codigo>>nombre>>fono>>direccion>>sexo>>internet>>covid;
-    //     cout<<i<<" "<<password<<" "<<nombre<<" "<<endl;
-    //     i++;
-    // }
+        }
     lectura.close();
-
 }
