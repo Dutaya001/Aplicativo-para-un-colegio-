@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 using namespace std;
+
 class Usuario{
     int tam=6;
     string password;
@@ -16,9 +17,12 @@ class Usuario{
     public:
         void agregar();
         int buscar(string _password,string _codigo);
+        void mostrar_line(int line);
         void eliminar(int);
         void listarTodos();
+        void listarAyuda();
 };
+
 void Usuario::agregar(){
     ofstream escritura; //escribir  fichero(entrada)
     escritura.open("final.csv",ios::app);
@@ -84,7 +88,8 @@ int Usuario::buscar(string _password, string _codigo){
     leer.close();
     return 0;
 }
-void Usuario::eliminar(int line){    //incompleto
+
+void Usuario::eliminar(int line){    
     ifstream leer;  //leer
     ofstream temp;    //modificar
     string linea;
@@ -105,13 +110,67 @@ void Usuario::eliminar(int line){    //incompleto
     remove("final.csv");
     rename("temp.csv","final.csv");
 }
+void Usuario::mostrar_line(int line){
+    ifstream lectura;
+    string linea;
+    char coma = ',';
+    string arr[8]={"password : ","codigo : ","nombres : ","telefono : ","direccion : ","sexo : ","internet : ","covid : "};
+    lectura.open("final.csv",ios::in);
+    for(int i=0;i<line+1;i++){
+        getline(lectura,linea);
+    }
+    int i=0;
+    int cont=1;
+    cout<<arr[0];
+    while (cont< 8)
+    {
+        if(linea[i]==coma){
+            cout<<"\n"<<arr[cont];
+            cont++;i++;
+        }
+        else{
+            cout<<linea[i];
+            i++;
+        }
+    }
+    cout<<linea[i];
+    lectura.close();
+}
 void Usuario::listarTodos(){
     ifstream leer;
     string linea;
-    leer.open("listado.csv",ios::in);
+    leer.open("final.csv",ios::in);
     getline(leer,linea);
     while(getline(leer,linea)){
         cout<<linea<<"\n";
     }
     leer.close();
 }
+void Usuario::listarAyuda(){ //imcompleto
+    ifstream leer;
+    string linea;
+    char coma = ',';
+    int cont=1,line=0;
+    leer.open("final.csv",ios::in);
+    getline(leer,linea);
+    while (getline(leer,linea)){
+        line++;
+        int i=0;
+        while (cont<7){
+            if(linea[i] == coma){  
+                i++;
+                cont++;
+            }
+            i++;
+        }
+        if(cont == 6){
+            if(linea[i]=='N')
+                cout<<linea[i];
+                //mostrar_line(line);
+        }   
+    }
+}
+
+
+
+
